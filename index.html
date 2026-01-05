@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART GYM CENTER | Sistema</title>
+    <title>SMART GYM CENTER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-
     <div id="login-screen">
         <div class="login-box">
             <i class="fa-solid fa-dumbbell arm-icon"></i>
-            <h2>SMART GYM CENTER</h2>
-            <p>INGRESE SU NIP DE ACCESO</p>
-            <input type="password" id="pin-input" maxlength="4" placeholder="••••" readonly>
+            <h2>BIENVENIDO</h2>
+            <p>INGRESE NIP DE ACCESO</p>
+            <input type="password" id="pin-input" maxlength="4" readonly>
             <div class="keypad">
                 <button onclick="addPin('1')">1</button><button onclick="addPin('2')">2</button><button onclick="addPin('3')">3</button>
                 <button onclick="addPin('4')">4</button><button onclick="addPin('5')">5</button><button onclick="addPin('6')">6</button>
                 <button onclick="addPin('7')">7</button><button onclick="addPin('8')">8</button><button onclick="addPin('9')">9</button>
-                <button class="clear" onclick="clearPin()">C</button><button onclick="addPin('0')">0</button>
+                <button onclick="clearPin()">C</button><button onclick="addPin('0')">0</button>
                 <button class="enter" onclick="checkPin()"><i class="fa-solid fa-check"></i></button>
             </div>
         </div>
@@ -33,31 +33,49 @@
                 <div><h1>SMART GYM</h1><span>CENTER</span></div>
             </div>
             <nav class="menu">
-                <button class="menu-item active" onclick="router('dashboard')"><i class="fa-solid fa-gauge"></i> DASHBOARD</button>
-                <button class="menu-item" onclick="router('registro')"><i class="fa-solid fa-user-plus"></i> REGISTRO</button>
+                <button class="menu-item active" onclick="router('dashboard')"><i class="fa-solid fa-gauge"></i> PANEL</button>
+                <button class="menu-item" onclick="router('registro')"><i class="fa-solid fa-cash-register"></i> COBRAR</button>
                 <button class="menu-item" onclick="router('socios')"><i class="fa-solid fa-users"></i> SOCIOS</button>
-                <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-wallet"></i> FINANZAS</button>
+                <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-wallet"></i> CAJA</button>
             </nav>
-            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-power-off"></i> SALIR</button>
+            <button class="logout-btn" onclick="logout()">SALIR</button>
         </aside>
 
         <main class="viewport">
             <section id="view-dashboard" class="view active">
-                <h2 class="section-title">ESTADO GENERAL</h2>
                 <div class="kpi-grid">
-                    <div class="kpi-card"><h3>TOTAL SOCIOS</h3><p id="dash-total">0</p></div>
+                    <div class="kpi-card"><h3>SOCIOS</h3><p id="dash-total">0</p></div>
                     <div class="kpi-card"><h3>ACTIVOS</h3><p id="dash-active">0</p></div>
-                    <div class="kpi-card danger"><h3>POR COBRAR</h3><p id="dash-debt">$0</p></div>
+                    <div class="kpi-card danger"><h3>DEUDA</h3><p id="dash-debt">$0</p></div>
                 </div>
             </section>
 
             <section id="view-registro" class="view">
-                <h2 class="section-title">REGISTRO DE PAGO</h2>
                 <div class="form-card">
-                    <label>NOMBRE DEL SOCIO</label>
-                    <input type="text" id="reg-name" placeholder="NOMBRE COMPLETO" autocomplete="off">
+                    <label>NOMBRE</label><input type="text" id="reg-name" placeholder="NOMBRE COMPLETO">
                     <div class="row">
-                        <div>
-                            <label>PLAN</label>
-                            <select id="reg-plan" onchange="calcDates()">
-                                <option value="150">SEMANAL ($150)</
+                        <div><label>PLAN</label><select id="reg-plan" onchange="calcDates()"><option value="150">SEMANAL $150</option><option value="380">MENSUAL $380</option></select></div>
+                        <div><label>INICIO</label><input type="date" id="reg-start" onchange="calcDates()"></div>
+                    </div>
+                    <div class="row">
+                        <div><label>PAGO ($)</label><input type="number" id="reg-pay"></div>
+                        <div><label>MÉTODO</label><select id="reg-method"><option value="EFECTIVO">EFECTIVO</option><option value="TRANSFERENCIA">TRANSFERENCIA</option></select></div>
+                    </div>
+                    <input type="hidden" id="reg-end"><input type="hidden" id="reg-cost">
+                    <button class="btn-hero" onclick="processRegistration()">PAGAR E IMPRIMIR</button>
+                </div>
+            </section>
+
+            <section id="view-socios" class="view">
+                <input type="text" id="search-bar" placeholder="Buscar socio..." onkeyup="renderSocios()">
+                <div id="grid-socios"></div>
+            </section>
+
+            <section id="view-finanzas" class="view">
+                <table><thead><tr><th>FECHA</th><th>SOCIO</th><th>MONTO</th><th>TIPO</th></tr></thead><tbody id="tbody-finanzas"></tbody></table>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

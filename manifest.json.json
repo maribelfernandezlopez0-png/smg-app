@@ -1,16 +1,23 @@
 {
-  "name": "SMG TITAN OS",
-  "short_name": "TITAN",
+  "name": "SMART GYM CENTER",
+  "short_name": "SmartGym",
+  "description": "Sistema de gestión de élite para Smart Gym Center",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#E50914",
+  "background_color": "#070707",
+  "theme_color": "#ff0000",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/30/30636.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/69/69840.png",
+      "type": "image/png",
       "sizes": "512x512",
-      "type": "image/png"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/69/69840.png",
+      "type": "image/png",
+      "sizes": "192x192"
     }
   ]
 }
