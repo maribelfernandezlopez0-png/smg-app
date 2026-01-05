@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART GYM CENTER</title>
+    <title>SMART GYM CENTER | Sistema</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <div id="login-screen">
         <div class="login-box">
             <i class="fa-solid fa-dumbbell arm-icon"></i>
-            <h2>BIENVENIDO</h2>
+            <h2>SMART GYM CENTER</h2>
             <p>INGRESE SU NIP DE ACCESO</p>
             <input type="password" id="pin-input" maxlength="4" placeholder="••••" readonly>
             <div class="keypad">
@@ -41,12 +41,12 @@
                 <button class="menu-item" onclick="router('socios')"><i class="fa-solid fa-users"></i> SOCIOS</button>
                 <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-wallet"></i> FINANZAS</button>
             </nav>
-            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-power-off"></i> SALIR</button>
+            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-power-off"></i> CERRAR SESIÓN</button>
         </aside>
 
         <main class="viewport">
             <section id="view-dashboard" class="view active">
-                <h2 class="section-title">ESTADO GENERAL</h2>
+                <h2 class="section-title">ESTADO DEL GIMNASIO</h2>
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>TOTAL SOCIOS</h3><p id="dash-total">0</p></div>
                     <div class="kpi-card"><h3>ACTIVOS</h3><p id="dash-active">0</p></div>
@@ -57,9 +57,8 @@
             <section id="view-registro" class="view">
                 <h2 class="section-title">NUEVA MEMBRESÍA</h2>
                 <div class="form-card">
-                    <label>NOMBRE COMPLETO</label>
-                    <input type="text" id="reg-name" placeholder="NOMBRE DEL CLIENTE">
-                    
+                    <label>NOMBRE DEL SOCIO</label>
+                    <input type="text" id="reg-name" placeholder="NOMBRE COMPLETO" autocomplete="off">
                     <div class="row">
                         <div>
                             <label>PLAN</label>
@@ -69,28 +68,27 @@
                             </select>
                         </div>
                         <div>
-                            <label>FECHA INICIO</label>
+                            <label>INICIO</label>
                             <input type="date" id="reg-start" onchange="calcDates()">
                         </div>
                     </div>
-
                     <div class="row">
-                        <div><label>VENCE EL DÍA</label><input type="date" id="reg-end" readonly></div>
-                        <div><label>PAGO RECIBIDO ($)</label><input type="number" id="reg-pay"></div>
+                        <div><label>VENCE</label><input type="date" id="reg-end" readonly></div>
+                        <div><label>PAGO RECIBIDO</label><input type="number" id="reg-pay"></div>
                     </div>
-                    
                     <input type="hidden" id="reg-cost">
-                    <button class="btn-hero" onclick="processRegistration()">CONFIRMAR REGISTRO</button>
+                    <button class="btn-hero" onclick="processRegistration()">GUARDAR SOCIO</button>
                 </div>
             </section>
 
             <section id="view-socios" class="view">
-                <h2 class="section-title">LISTADO DE SOCIOS</h2>
+                <h2 class="section-title">DIRECTORIO</h2>
+                <input type="text" id="search-bar" placeholder="🔍 BUSCAR SOCIO..." onkeyup="renderSocios()">
                 <div id="grid-socios"></div>
             </section>
 
             <section id="view-finanzas" class="view">
-                <h2 class="section-title">CAJA Y MOVIMIENTOS</h2>
+                <h2 class="section-title">HISTORIAL DE PAGOS</h2>
                 <div class="table-card">
                     <table>
                         <thead><tr><th>FECHA</th><th>SOCIO</th><th>MONTO</th></tr></thead>

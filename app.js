@@ -4,7 +4,7 @@ const MASTER_NIP = '0000';
 let db = JSON.parse(localStorage.getItem(DB_NAME)) || { socios: [], pagos: [] };
 let inputNip = '';
 
-// MANEJO DE NIP
+// SISTEMA NIP
 function addPin(num) {
     if(inputNip.length < 4) {
         inputNip += num;
@@ -23,7 +23,7 @@ function checkPin() {
     }
 }
 
-// NAVEGACIÓN
+// ROUTER
 function router(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + view).classList.add('active');
@@ -38,10 +38,8 @@ function router(view) {
 }
 
 function initApp() {
-    if(document.getElementById('reg-start')) {
-        document.getElementById('reg-start').valueAsDate = new Date();
-        calcDates();
-    }
+    document.getElementById('reg-start').valueAsDate = new Date();
+    calcDates();
     updateDashboard();
 }
 
@@ -65,7 +63,7 @@ function processRegistration() {
     const total = parseFloat(document.getElementById('reg-cost').value);
     const pay = parseFloat(document.getElementById('reg-pay').value || 0);
     
-    if(!name || !end) return alert("POR FAVOR INGRESE EL NOMBRE");
+    if(!name || !end) return alert("FALTA EL NOMBRE");
 
     db.socios.unshift({
         id: Date.now(),
@@ -81,7 +79,7 @@ function processRegistration() {
     });
 
     save();
-    alert("REGISTRO GUARDADO");
+    alert("REGISTRO EXITOSO");
     document.getElementById('reg-name').value = "";
     router('socios');
 }
@@ -98,15 +96,19 @@ function updateDashboard() {
 
 function renderSocios() {
     const grid = document.getElementById('grid-socios');
+    const search = document.getElementById('search-bar').value.toUpperCase();
     if(!grid) return;
-    grid.innerHTML = db.socios.map(s => `
+    
+    grid.innerHTML = db.socios
+        .filter(s => s.nombre.includes(search))
+        .map(s => `
         <div class="card-socio">
             <div>
                 <strong>${s.nombre}</strong><br>
                 <small style="color:#666">VENCE: ${s.vence}</small>
             </div>
             <div style="display:flex; align-items:center; gap:20px">
-                <span style="color:${s.deuda > 0 ? '#ff0000' : '#00ff88'}; font-weight:bold">
+                <span style="color:${s.deuda > 0 ? '#ff0000' : '#00ff88'}; font-weight:bold; font-family: 'Rajdhani'; font-size:20px;">
                     ${s.deuda > 0 ? 'DEBE: $' + s.deuda : 'PAGADO'}
                 </span>
                 <button class="btn-del" onclick="deleteSocio(${s.id})"><i class="fa-solid fa-trash"></i></button>
@@ -116,7 +118,7 @@ function renderSocios() {
 }
 
 function deleteSocio(id) {
-    if(confirm("¿ELIMINAR ESTE SOCIO PERMANENTEMENTE?")) {
+    if(confirm("¿ELIMINAR ESTE SOCIO?")) {
         db.socios = db.socios.filter(s => s.id !== id);
         save();
         renderSocios();
