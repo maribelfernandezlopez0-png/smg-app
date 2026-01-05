@@ -1,14 +1,14 @@
 {
-  "name": "SMG Center Nexus",
-  "short_name": "SMG Nexus",
+  "name": "SMG TITAN OS",
+  "short_name": "TITAN",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#ff0000",
+  "theme_color": "#E50914",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://i.ibb.co/q04sK0C/dumbbell-icon.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/30/30636.png",
       "sizes": "512x512",
       "type": "image/png"
     }
