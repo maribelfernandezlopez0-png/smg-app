@@ -30,10 +30,7 @@
         <aside class="sidebar">
             <div class="brand">
                 <div class="logo-circle"><i class="fa-solid fa-dumbbell"></i></div>
-                <div>
-                    <h1>SMART GYM</h1>
-                    <span>CENTER</span>
-                </div>
+                <div><h1>SMART GYM</h1><span>CENTER</span></div>
             </div>
             <nav class="menu">
                 <button class="menu-item active" onclick="router('dashboard')"><i class="fa-solid fa-gauge"></i> DASHBOARD</button>
@@ -41,12 +38,12 @@
                 <button class="menu-item" onclick="router('socios')"><i class="fa-solid fa-users"></i> SOCIOS</button>
                 <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-wallet"></i> FINANZAS</button>
             </nav>
-            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-power-off"></i> CERRAR SESIÓN</button>
+            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-power-off"></i> SALIR</button>
         </aside>
 
         <main class="viewport">
             <section id="view-dashboard" class="view active">
-                <h2 class="section-title">ESTADO DEL GIMNASIO</h2>
+                <h2 class="section-title">ESTADO GENERAL</h2>
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>TOTAL SOCIOS</h3><p id="dash-total">0</p></div>
                     <div class="kpi-card"><h3>ACTIVOS</h3><p id="dash-active">0</p></div>
@@ -55,7 +52,7 @@
             </section>
 
             <section id="view-registro" class="view">
-                <h2 class="section-title">NUEVA MEMBRESÍA</h2>
+                <h2 class="section-title">REGISTRO DE PAGO</h2>
                 <div class="form-card">
                     <label>NOMBRE DEL SOCIO</label>
                     <input type="text" id="reg-name" placeholder="NOMBRE COMPLETO" autocomplete="off">
@@ -63,50 +60,4 @@
                         <div>
                             <label>PLAN</label>
                             <select id="reg-plan" onchange="calcDates()">
-                                <option value="150">SEMANAL ($150)</option>
-                                <option value="380">MENSUAL ($380)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>INICIO</label>
-                            <input type="date" id="reg-start" onchange="calcDates()">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div><label>VENCE</label><input type="date" id="reg-end" readonly></div>
-                <div class="row">
-    <div>
-        <label>PAGO RECIBIDO</label>
-        <input type="number" id="reg-pay" placeholder="0.00">
-    </div>
-    <div>
-        <label>MÉTODO DE PAGO</label>
-        <select id="reg-method">
-            <option value="EFECTIVO">EFECTIVO</option>
-            <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-        </select>
-    </div>
-</div>
-            </section>
-
-            <section id="view-socios" class="view">
-                <h2 class="section-title">DIRECTORIO</h2>
-                <input type="text" id="search-bar" placeholder="🔍 BUSCAR SOCIO..." onkeyup="renderSocios()">
-                <div id="grid-socios"></div>
-            </section>
-
-            <section id="view-finanzas" class="view">
-                <h2 class="section-title">HISTORIAL DE PAGOS</h2>
-                <div class="table-card">
-                    <table>
-                        <thead><tr><th>FECHA</th><th>SOCIO</th><th>MONTO</th></tr></thead>
-                        <tbody id="tbody-finanzas"></tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+                                <option value="150">SEMANAL ($150)</
