@@ -1,30 +1,19 @@
-// CONFIGURACIÓN INICIAL
 const DB_NAME = 'SMART_GYM_DATA';
-const MASTER_NIP = '0000'; // Cambia tu NIP aquí
+const MASTER_NIP = '0000'; 
 
-let db = JSON.parse(localStorage.getItem(DB_NAME)) || {
-    socios: [],
-    pagos: []
-};
-
+let db = JSON.parse(localStorage.getItem(DB_NAME)) || { socios: [], pagos: [] };
 let inputNip = '';
 
-// --- SISTEMA DE ACCESO (NIP) ---
+// MANEJO DE NIP
 function addPin(num) {
     if(inputNip.length < 4) {
         inputNip += num;
         document.getElementById('pin-input').value = '•'.repeat(inputNip.length);
     }
 }
-
-function clearPin() {
-    inputNip = '';
-    document.getElementById('pin-input').value = '';
-}
-
+function clearPin() { inputNip = ''; document.getElementById('pin-input').value = ''; }
 function checkPin() {
     if(inputNip === MASTER_NIP) {
-        document.getElementById('login-screen').style.fadeOut = "slow";
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
         initApp();
@@ -34,27 +23,26 @@ function checkPin() {
     }
 }
 
-// --- NAVEGACIÓN ---
+// NAVEGACIÓN
 function router(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + view).classList.add('active');
-    
-    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    document.querySelectorAll('.menu-item').forEach(m => {
+        m.classList.remove('active');
+        if(m.innerText.toLowerCase().includes(view)) m.classList.add('active');
+    });
 
     if(view === 'socios') renderSocios();
     if(view === 'finanzas') renderFinanzas();
     if(view === 'dashboard') updateDashboard();
 }
 
-// --- LÓGICA DE NEGOCIO ---
 function initApp() {
-    updateDashboard();
-    // Pre-configurar fecha de hoy en registro
     if(document.getElementById('reg-start')) {
         document.getElementById('reg-start').valueAsDate = new Date();
         calcDates();
     }
+    updateDashboard();
 }
 
 function calcDates() {
@@ -75,66 +63,80 @@ function processRegistration() {
     const name = document.getElementById('reg-name').value.toUpperCase();
     const end = document.getElementById('reg-end').value;
     const total = parseFloat(document.getElementById('reg-cost').value);
-    const pay = parseFloat(document.getElementById('reg-pay').value);
+    const pay = parseFloat(document.getElementById('reg-pay').value || 0);
     
-    if(!name || !end) return alert("COMPLETE LOS DATOS");
+    if(!name || !end) return alert("POR FAVOR INGRESE EL NOMBRE");
 
-    const deuda = total - pay;
-    const nuevoSocio = {
+    db.socios.unshift({
         id: Date.now(),
         nombre: name,
         vence: end,
-        deuda: deuda,
-        status: (new Date(end) >= new Date()) ? 'ACTIVO' : 'VENCIDO'
-    };
+        deuda: total - pay
+    });
 
-    db.socios.unshift(nuevoSocio);
     db.pagos.unshift({
-        fecha: new Date().toLocaleString(),
+        fecha: new Date().toLocaleDateString(),
         socio: name,
-        monto: pay,
-        concepto: 'MEMBRESÍA'
+        monto: pay
     });
 
     save();
-    alert("REGISTRO EXITOSO EN SMART GYM CENTER");
+    alert("REGISTRO GUARDADO");
+    document.getElementById('reg-name').value = "";
     router('socios');
 }
 
 function updateDashboard() {
     const hoy = new Date().toISOString().split('T')[0];
     const activos = db.socios.filter(s => s.vence >= hoy).length;
-    const deudaTotal = db.socios.reduce((acc, s) => acc + s.deuda, 0);
-    
-    // Inyectar en el HTML si existen los IDs
-    if(document.getElementById('dash-total')) document.getElementById('dash-total').innerText = db.socios.length;
-    if(document.getElementById('dash-active')) document.getElementById('dash-active').innerText = activos;
-    if(document.getElementById('dash-debt')) document.getElementById('dash-debt').innerText = '$' + deudaTotal;
+    const deuda = db.socios.reduce((acc, s) => acc + s.deuda, 0);
+
+    document.getElementById('dash-total').innerText = db.socios.length;
+    document.getElementById('dash-active').innerText = activos;
+    document.getElementById('dash-debt').innerText = '$' + deuda;
 }
 
 function renderSocios() {
-    const container = document.getElementById('grid-socios'); // Asegúrate que este ID exista en tu HTML
-    if(!container) return;
-    
-    container.innerHTML = db.socios.map(s => `
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    const grid = document.getElementById('grid-socios');
+    if(!grid) return;
+    grid.innerHTML = db.socios.map(s => `
+        <div class="card-socio">
             <div>
-                <h3 style="color:var(--primary)">${s.nombre}</h3>
-                <p style="font-size:12px">VENCE: ${s.vence}</p>
+                <strong>${s.nombre}</strong><br>
+                <small style="color:#666">VENCE: ${s.vence}</small>
             </div>
-            <div style="text-align:right">
-                <span class="badge" style="color:${s.deuda > 0 ? 'var(--danger)' : 'var(--success)'}">
+            <div style="display:flex; align-items:center; gap:20px">
+                <span style="color:${s.deuda > 0 ? '#ff0000' : '#00ff88'}; font-weight:bold">
                     ${s.deuda > 0 ? 'DEBE: $' + s.deuda : 'PAGADO'}
                 </span>
+                <button class="btn-del" onclick="deleteSocio(${s.id})"><i class="fa-solid fa-trash"></i></button>
             </div>
         </div>
     `).join('');
 }
 
-function save() {
-    localStorage.setItem(DB_NAME, JSON.stringify(db));
+function deleteSocio(id) {
+    if(confirm("¿ELIMINAR ESTE SOCIO PERMANENTEMENTE?")) {
+        db.socios = db.socios.filter(s => s.id !== id);
+        save();
+        renderSocios();
+    }
 }
 
-function logout() {
-    location.reload();
+function renderFinanzas() {
+    const tbody = document.getElementById('tbody-finanzas');
+    if(!tbody) return;
+    tbody.innerHTML = db.pagos.map(p => `
+        <tr>
+            <td>${p.fecha}</td>
+            <td>${p.socio}</td>
+            <td style="color:#00ff88">+$${p.monto}</td>
+        </tr>
+    `).join('');
 }
+
+function save() { 
+    localStorage.setItem(DB_NAME, JSON.stringify(db)); 
+    updateDashboard(); 
+}
+function logout() { location.reload(); }
