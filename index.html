@@ -1,47 +1,42 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SMG TITAN | System OS</title>
+    <title>SMART GYM CENTER | NEXUS v7.0</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#E50914">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/q04sK0C/dumbbell-icon.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-box">
-            <i class="fa-solid fa-fingerprint"></i>
-            <h2>ACCESO TITAN</h2>
-            <p>Introduce tu PIN de seguridad</p>
-            <input type="password" id="pin-input" maxlength="4" placeholder="••••">
+            <i class="fa-solid fa-dumbbell arm-icon"></i>
+            <h2>BIENVENIDO</h2>
+            <p>POR FAVOR INGRESE SU NIP</p>
+            <input type="password" id="pin-input" maxlength="4" placeholder="••••" readonly>
             <div class="keypad">
                 <button onclick="addPin('1')">1</button><button onclick="addPin('2')">2</button><button onclick="addPin('3')">3</button>
                 <button onclick="addPin('4')">4</button><button onclick="addPin('5')">5</button><button onclick="addPin('6')">6</button>
                 <button onclick="addPin('7')">7</button><button onclick="addPin('8')">8</button><button onclick="addPin('9')">9</button>
                 <button class="clear" onclick="clearPin()">C</button><button onclick="addPin('0')">0</button><button class="enter" onclick="checkPin()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
-            <p class="hint">PIN por defecto: 0000</p>
         </div>
     </div>
 
     <div id="app-container" style="display:none;">
-        
         <aside class="sidebar">
             <div class="brand">
                 <div class="logo-circle"><i class="fa-solid fa-dumbbell"></i></div>
                 <div>
-                    <h1>SMG TITAN</h1>
-                    <span>v.7.0 Ultimate</span>
+                    <h1>SMART GYM CENTER</h1>
+                    <span>SISTEMA DE ÉLITE</span>
                 </div>
             </div>
             
@@ -50,7 +45,6 @@
                 <button class="menu-item" onclick="router('registro')"><i class="fa-solid fa-user-plus"></i> NUEVO INGRESO</button>
                 <button class="menu-item" onclick="router('socios')"><i class="fa-solid fa-users-viewfinder"></i> DIRECTORIO</button>
                 <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-money-bill-trend-up"></i> FINANZAS</button>
-                <button class="menu-item" onclick="router('ajustes')"><i class="fa-solid fa-sliders"></i> SISTEMA</button>
             </nav>
 
             <div class="user-profile">
@@ -61,183 +55,17 @@
         </aside>
 
         <main class="viewport">
-            
             <section id="view-dashboard" class="view active">
                 <header>
-                    <h2><i class="fa-solid fa-satellite-dish"></i> CENTRO DE COMANDO</h2>
+                    <h2><i class="fa-solid fa-satellite-dish"></i> PANEL DE CONTROL</h2>
                     <div class="date-display" id="global-date"></div>
                 </header>
-
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
-                        <div class="kpi-data"><h3 id="dash-total">0</h3><p>Socios Totales</p></div>
-                    </div>
-                    <div class="kpi-card active-glow">
-                        <div class="kpi-icon"><i class="fa-solid fa-bolt"></i></div>
-                        <div class="kpi-data"><h3 id="dash-active">0</h3><p>Activos Ahora</p></div>
-                    </div>
-                    <div class="kpi-card danger-glow">
-                        <div class="kpi-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                        <div class="kpi-data"><h3 id="dash-debt">$0</h3><p>Por Cobrar</p></div>
-                    </div>
-                    <div class="kpi-card money-glow">
-                        <div class="kpi-icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                        <div class="kpi-data"><h3 id="dash-month">$0</h3><p>Ingreso Mensual</p></div>
-                    </div>
-                </div>
-
-                <div class="panel-full">
-                    <h3><i class="fa-solid fa-clock-rotate-left"></i> ACTIVIDAD RECIENTE</h3>
-                    <div class="table-responsive">
-                        <table class="table-modern">
-                            <thead><tr><th>HORA</th><th>SOCIO</th><th>ACCIÓN</th><th>MONTO</th></tr></thead>
-                            <tbody id="dash-history"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section id="view-registro" class="view">
-                <header><h2><i class="fa-solid fa-id-card"></i> PROCESAR MEMBRESÍA</h2></header>
-                <div class="form-container">
-                    <div class="input-group">
-                        <label>NOMBRE COMPLETO</label>
-                        <input type="text" id="reg-name" placeholder="Escriba nombre del cliente...">
-                    </div>
-                    
-                    <div class="row-2">
-                        <div class="input-group">
-                            <label>PLAN SELECCIONADO</label>
-                            <select id="reg-plan" onchange="calcDates()">
-                                <option value="150" data-days="7">SEMANAL ($150)</option>
-                                <option value="380" data-days="30">MENSUAL ($380)</option>
-                                <option value="0" data-days="0">VISITA / OTRO</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>MÉTODO DE PAGO</label>
-                            <select id="reg-method">
-                                <option>EFECTIVO</option>
-                                <option>TRANSFERENCIA</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row-2">
-                        <div class="input-group"><label>INICIO</label><input type="date" id="reg-start" onchange="calcDates()"></div>
-                        <div class="input-group"><label>VENCE</label><input type="date" id="reg-end"></div>
-                    </div>
-
-                    <div class="summary-box">
-                        <div class="row-2">
-                            <div><label>COSTO TOTAL</label><input type="number" id="reg-cost" value="150"></div>
-                            <div><label>PAGO INICIAL</label><input type="number" id="reg-pay" value="150"></div>
-                        </div>
-                    </div>
-
-                    <button class="btn-hero" onclick="processRegistration()">CONFIRMAR Y GENERAR TICKET <i class="fa-solid fa-print"></i></button>
-                </div>
-            </section>
-
-            <section id="view-socios" class="view">
-                <header>
-                    <h2><i class="fa-solid fa-address-book"></i> BASE DE DATOS</h2>
-                    <div class="search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="search-input" placeholder="Buscar por nombre..." onkeyup="renderSocios()">
-                    </div>
-                </header>
-                
-                <div class="filter-tabs">
-                    <button class="filter-btn active" onclick="setFilter('all', this)">TODOS</button>
-                    <button class="filter-btn" onclick="setFilter('active', this)">ACTIVOS</button>
-                    <button class="filter-btn" onclick="setFilter('debt', this)">DEUDORES</button>
-                </div>
-
-                <div class="grid-socios" id="grid-socios">
+                <div class="kpi-grid" id="kpi-container">
                     </div>
             </section>
 
-            <section id="view-finanzas" class="view">
-                <header><h2><i class="fa-solid fa-chart-line"></i> HISTORIAL FINANCIERO</h2></header>
-                <div class="panel-full">
-                    <div class="table-responsive">
-                        <table class="table-modern">
-                            <thead><tr><th>FECHA</th><th>CLIENTE</th><th>CONCEPTO</th><th>MÉTODO</th><th>INGRESO</th><th>TICKET</th></tr></thead>
-                            <tbody id="finance-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section id="view-ajustes" class="view">
-                <header><h2><i class="fa-solid fa-server"></i> MANTENIMIENTO DE DATOS</h2></header>
-                <div class="settings-grid">
-                    <div class="setting-card">
-                        <i class="fa-solid fa-download"></i>
-                        <h3>COPIA DE SEGURIDAD</h3>
-                        <p>Descarga un archivo .JSON con toda tu base de datos.</p>
-                        <button class="btn-outline" onclick="exportData()">EXPORTAR DATOS</button>
-                    </div>
-                    <div class="setting-card">
-                        <i class="fa-solid fa-upload"></i>
-                        <h3>RESTAURAR SISTEMA</h3>
-                        <p>Carga un archivo de respaldo previo.</p>
-                        <button class="btn-outline" onclick="document.getElementById('import-file').click()">IMPORTAR DATOS</button>
-                        <input type="file" id="import-file" hidden onchange="importData(event)">
-                    </div>
-                    <div class="setting-card danger">
-                        <i class="fa-solid fa-bomb"></i>
-                        <h3>RESET DE FÁBRICA</h3>
-                        <p>Borra todo permanentemente.</p>
-                        <button class="btn-danger" onclick="hardReset()">BORRAR TODO</button>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+            </main>
     </div>
-
-    <div id="modal-socio" class="modal-overlay">
-        <div class="modal-card">
-            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            <div class="modal-header">
-                <div class="avatar-large"><i class="fa-solid fa-user"></i></div>
-                <h2 id="m-name">Nombre Socio</h2>
-                <span id="m-status" class="badge">ACTIVO</span>
-            </div>
-            
-            <div class="modal-body">
-                <div class="stat-row">
-                    <div><label>VENCE</label><h3 id="m-date">--/--/--</h3></div>
-                    <div><label>DEUDA</label><h3 id="m-debt" class="text-danger">$0.00</h3></div>
-                </div>
-
-                <hr>
-                
-                <div class="action-panel">
-                    <label>GESTIÓN RÁPIDA</label>
-                    <div class="btn-group">
-                        <button class="btn-action renew" onclick="quickRenew()"><i class="fa-solid fa-rotate"></i> RENOVAR</button>
-                        <button class="btn-action pay" onclick="payDebt()"><i class="fa-solid fa-wallet"></i> ABONAR</button>
-                    </div>
-                    <div class="input-pay-wrapper">
-                        <input type="number" id="pay-amount" placeholder="Monto a abonar...">
-                    </div>
-                </div>
-                
-                <div class="history-mini">
-                    <label>ÚLTIMOS PAGOS</label>
-                    <ul id="m-history-list"></ul>
-                </div>
-            </div>
-            
-            <button class="btn-delete" onclick="deleteUser()"><i class="fa-solid fa-trash"></i> ELIMINAR SOCIO</button>
-        </div>
-    </div>
-
-    <div id="ticket-print"></div>
 
     <script src="app.js"></script>
 </body>
