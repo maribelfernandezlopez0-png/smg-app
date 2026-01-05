@@ -118,7 +118,7 @@ function renderSocios() {
                 <strong>${s.nombre}</strong><br>
                 <small style="color:#666">VENCE: ${s.vence}</small>
             </div>
-          // Dentro del map de renderSocios, cambia el div de botones:
+       <div>     
 <div style="display:flex; align-items:center; gap:10px">
     <button class="btn-del" onclick="renovarSocio(${s.id})" style="color:#00ff88; border-color:#00ff88;">RENOVAR</button>
     <button class="btn-del" onclick="deleteSocio(${s.id})"><i class="fa-solid fa-trash"></i></button>
@@ -182,4 +182,5 @@ function renovarSocio(id) {
     document.getElementById('reg-name').value = socio.nombre;
     router('registro');
     alert("MODO RENOVACIÓN: Ajuste las fechas y el pago para " + socio.nombre);
+
 }
