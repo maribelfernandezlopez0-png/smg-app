@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART GYM CENTER</title>
+    <title>SMART GYM CENTER | Sistema</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/69/69840.png">
 </head>
 <body>
     <div id="login-screen">
         <div class="login-box">
             <i class="fa-solid fa-dumbbell arm-icon"></i>
-            <h2>BIENVENIDO</h2>
+            <h2>SMART GYM CENTER</h2>
             <p>INGRESE NIP DE ACCESO</p>
             <input type="password" id="pin-input" maxlength="4" readonly>
             <div class="keypad">
@@ -33,46 +34,78 @@
                 <div><h1>SMART GYM</h1><span>CENTER</span></div>
             </div>
             <nav class="menu">
-                <button class="menu-item active" onclick="router('dashboard')"><i class="fa-solid fa-gauge"></i> PANEL</button>
+                <button class="menu-item active" onclick="router('dashboard')"><i class="fa-solid fa-gauge"></i> DASHBOARD</button>
                 <button class="menu-item" onclick="router('registro')"><i class="fa-solid fa-cash-register"></i> COBRAR</button>
                 <button class="menu-item" onclick="router('socios')"><i class="fa-solid fa-users"></i> SOCIOS</button>
                 <button class="menu-item" onclick="router('finanzas')"><i class="fa-solid fa-wallet"></i> CAJA</button>
             </nav>
-            <button class="logout-btn" onclick="logout()">SALIR</button>
+            <button class="logout-btn" onclick="logout()">CERRAR SESIÓN</button>
         </aside>
 
         <main class="viewport">
             <section id="view-dashboard" class="view active">
+                <h2 class="section-title">ESTADO GENERAL</h2>
                 <div class="kpi-grid">
-                    <div class="kpi-card"><h3>SOCIOS</h3><p id="dash-total">0</p></div>
+                    <div class="kpi-card"><h3>TOTAL SOCIOS</h3><p id="dash-total">0</p></div>
                     <div class="kpi-card"><h3>ACTIVOS</h3><p id="dash-active">0</p></div>
-                    <div class="kpi-card danger"><h3>DEUDA</h3><p id="dash-debt">$0</p></div>
+                    <div class="kpi-card danger"><h3>POR COBRAR</h3><p id="dash-debt">$0</p></div>
                 </div>
             </section>
 
             <section id="view-registro" class="view">
+                <h2 class="section-title">NUEVO PAGO / MEMBRESÍA</h2>
                 <div class="form-card">
-                    <label>NOMBRE</label><input type="text" id="reg-name" placeholder="NOMBRE COMPLETO">
+                    <label>NOMBRE DEL SOCIO</label>
+                    <input type="text" id="reg-name" placeholder="Escriba el nombre..." autocomplete="off">
+                    
                     <div class="row">
-                        <div><label>PLAN</label><select id="reg-plan" onchange="calcDates()"><option value="150">SEMANAL $150</option><option value="380">MENSUAL $380</option></select></div>
-                        <div><label>INICIO</label><input type="date" id="reg-start" onchange="calcDates()"></div>
+                        <div>
+                            <label>PLAN</label>
+                            <select id="reg-plan" onchange="calcDates()">
+                                <option value="150">SEMANAL ($150)</option>
+                                <option value="380">MENSUAL ($380)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>INICIO</label>
+                            <input type="date" id="reg-start" onchange="calcDates()">
+                        </div>
                     </div>
+
                     <div class="row">
-                        <div><label>PAGO ($)</label><input type="number" id="reg-pay"></div>
-                        <div><label>MÉTODO</label><select id="reg-method"><option value="EFECTIVO">EFECTIVO</option><option value="TRANSFERENCIA">TRANSFERENCIA</option></select></div>
+                        <div><label>VENCE EL DÍA</label><input type="date" id="reg-end" readonly></div>
+                        <div><label>PAGO RECIBIDO ($)</label><input type="number" id="reg-pay"></div>
                     </div>
-                    <input type="hidden" id="reg-end"><input type="hidden" id="reg-cost">
-                    <button class="btn-hero" onclick="processRegistration()">PAGAR E IMPRIMIR</button>
+
+                    <div class="row">
+                        <div>
+                            <label>MÉTODO DE PAGO</label>
+                            <select id="reg-method">
+                                <option value="EFECTIVO">EFECTIVO</option>
+                                <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="reg-cost">
+                    <button class="btn-hero" onclick="processRegistration()">GENERAR COBRO E IMPRIMIR</button>
                 </div>
             </section>
 
             <section id="view-socios" class="view">
-                <input type="text" id="search-bar" placeholder="Buscar socio..." onkeyup="renderSocios()">
+                <h2 class="section-title">CONTROL DE SOCIOS</h2>
+                <input type="text" id="search-bar" placeholder="🔍 Buscar socio por nombre..." onkeyup="renderSocios()">
                 <div id="grid-socios"></div>
             </section>
 
             <section id="view-finanzas" class="view">
-                <table><thead><tr><th>FECHA</th><th>SOCIO</th><th>MONTO</th><th>TIPO</th></tr></thead><tbody id="tbody-finanzas"></tbody></table>
+                <h2 class="section-title">HISTORIAL DE CAJA</h2>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>FECHA</th><th>SOCIO</th><th>MONTO</th><th>MÉTODO</th></tr></thead>
+                        <tbody id="tbody-finanzas"></tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
