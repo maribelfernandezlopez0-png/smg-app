@@ -54,3 +54,13 @@ input, select { width: 100%; background: #000; border: 1px solid #333; color: wh
 table { width: 100%; border-collapse: collapse; }
 th { text-align: left; padding: 15px; color: #444; border-bottom: 1px solid var(--border); }
 td { padding: 15px; border-bottom: 1px solid #111; font-size: 18px; font-family: 'Rajdhani'; }
+/* Estilos para el Comprobante */
+@media print {
+    body * { visibility: hidden; }
+    #ticket-print, #ticket-print * { visibility: visible; }
+    #ticket-print { position: absolute; left: 0; top: 0; width: 80mm; color: #000; background: #fff; padding: 10px; }
+}
+.ticket { 
+    display: none; background: #fff; color: #000; width: 300px; padding: 20px; 
+    font-family: 'Courier New', Courier, monospace; text-align: center; border: 1px solid #ddd;
+}

@@ -58,6 +58,17 @@ function calcDates() {
 }
 
 function processRegistration() {
+    const method = document.getElementById('reg-method').value;
+
+db.pagos.unshift({
+    fecha: new Date().toLocaleDateString(),
+    socio: name,
+    monto: pay,
+    metodo: method // <--- Añadir esto
+});
+
+// Llamar a la función de ticket después de guardar
+generateTicket(name, pay, method, end);
     const name = document.getElementById('reg-name').value.toUpperCase();
     const end = document.getElementById('reg-end').value;
     const total = parseFloat(document.getElementById('reg-cost').value);
@@ -107,12 +118,11 @@ function renderSocios() {
                 <strong>${s.nombre}</strong><br>
                 <small style="color:#666">VENCE: ${s.vence}</small>
             </div>
-            <div style="display:flex; align-items:center; gap:20px">
-                <span style="color:${s.deuda > 0 ? '#ff0000' : '#00ff88'}; font-weight:bold; font-family: 'Rajdhani'; font-size:20px;">
-                    ${s.deuda > 0 ? 'DEBE: $' + s.deuda : 'PAGADO'}
-                </span>
-                <button class="btn-del" onclick="deleteSocio(${s.id})"><i class="fa-solid fa-trash"></i></button>
-            </div>
+          // Dentro del map de renderSocios, cambia el div de botones:
+<div style="display:flex; align-items:center; gap:10px">
+    <button class="btn-del" onclick="renovarSocio(${s.id})" style="color:#00ff88; border-color:#00ff88;">RENOVAR</button>
+    <button class="btn-del" onclick="deleteSocio(${s.id})"><i class="fa-solid fa-trash"></i></button>
+</div>
         </div>
     `).join('');
 }
@@ -142,3 +152,34 @@ function save() {
     updateDashboard(); 
 }
 function logout() { location.reload(); }
+
+// FUNCIÓN PARA GENERAR TICKET
+function generateTicket(nombre, monto, metodo, vence) {
+    const vent = window.open('', '_blank');
+    vent.document.write(`
+        <html>
+        <body style="font-family:monospace; width:250px;">
+            <center>
+                <h3>SMART GYM CENTER</h3>
+                <p>COMPROBANTE DE PAGO</p>
+                <hr>
+                <p align="left">CLIENTE: ${nombre}</p>
+                <p align="left">MONTO: $${monto}</p>
+                <p align="left">MÉTODO: ${metodo}</p>
+                <p align="left">VENCE: ${vence}</p>
+                <hr>
+                <p>¡ENTRENA CON TODO!</p>
+            </center>
+            <script>window.print(); window.close();</script>
+        </body>
+        </html>
+    `);
+}
+
+// FUNCIÓN PARA RENOVAR (Añadir en el render de socios)
+function renovarSocio(id) {
+    const socio = db.socios.find(s => s.id === id);
+    document.getElementById('reg-name').value = socio.nombre;
+    router('registro');
+    alert("MODO RENOVACIÓN: Ajuste las fechas y el pago para " + socio.nombre);
+}

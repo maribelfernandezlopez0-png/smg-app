@@ -74,11 +74,19 @@
                     </div>
                     <div class="row">
                         <div><label>VENCE</label><input type="date" id="reg-end" readonly></div>
-                        <div><label>PAGO RECIBIDO</label><input type="number" id="reg-pay"></div>
-                    </div>
-                    <input type="hidden" id="reg-cost">
-                    <button class="btn-hero" onclick="processRegistration()">GUARDAR SOCIO</button>
-                </div>
+                <div class="row">
+    <div>
+        <label>PAGO RECIBIDO</label>
+        <input type="number" id="reg-pay" placeholder="0.00">
+    </div>
+    <div>
+        <label>MÉTODO DE PAGO</label>
+        <select id="reg-method">
+            <option value="EFECTIVO">EFECTIVO</option>
+            <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+        </select>
+    </div>
+</div>
             </section>
 
             <section id="view-socios" class="view">
