@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S.M.G CENTER | NEXUS SYSTEM</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/q04sK0C/dumbbell-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff0000; --primary-soft: #ffb7b2; --bg: #0a0a0a;
+            --panel: #1e1e1e; --card-border: #333; --text-light: #fff;
+            --status-success: #b2f2bb; --status-warning: #f1c40f; --status-error: #ffb7b2;
+            --font-display: 'Orbitron', sans-serif; --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-body); background-color: var(--bg); color: var(--text-light); display: flex; height: 100vh; overflow: hidden; }
+
+        /* BIENVENIDA */
+        .welcome-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.8) 0%, rgba(0,0,0,1) 100%);
+            z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; backdrop-filter: blur(8px); transition: opacity 0.8s ease;
+        }
+        .welcome-overlay h1 { font-family: var(--font-display); font-size: 14px; letter-spacing: 5px; color: #fff; opacity: 0.8; }
+        .welcome-overlay h2 { font-family: var(--font-display); font-size: 28px; color: var(--primary); margin: 10px 0 30px; filter: drop-shadow(0 0 15px var(--primary)); }
+        .welcome-overlay button { 
+            background: var(--primary); color: white; border: none; padding: 15px 40px; 
+            border-radius: 50px; font-family: var(--font-display); font-weight: bold; cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,0,0,0.5);
+        }
+
+        /* SIDEBAR Y CONTENIDO */
+        .sidebar { width: 250px; background: #000; border-right: 2px solid var(--primary); display: flex; flex-direction: column; flex-shrink: 0; }
+        .brand-logo { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--card-border); }
+        .brand-logo i { font-size: 40px; color: var(--primary); filter: drop-shadow(0 0 8px var(--primary)); }
+        .brand-logo h2 { font-family: var(--font-display); font-size: 16px; margin-top: 10px; }
+
+        .menu-item { display: flex; align-items: center; padding: 15px 25px; color: #888; cursor: pointer; font-size: 13px; font-weight: 600; border-left: 4px solid transparent; transition: 0.3s; }
+        .menu-item.active { color: #fff; background: linear-gradient(90deg, rgba(255,0,0,0.1), transparent); border-left: 4px solid var(--primary); }
+        .menu-item i { margin-right: 15px; width: 20px; text-align: center; }
+
+        .viewport { flex: 1; padding: 30px; overflow-y: auto; background: radial-gradient(circle at top right, #1a0505, #0a0a0a); }
+        .section { display: none; max-width: 1000px; margin: 0 auto; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-panel { background: var(--panel); padding: 30px; border-radius: 20px; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .group { display: flex; flex-direction: column; }
+        label { font-size: 10px; font-weight: 800; color: var(--primary-soft); margin-bottom: 8px; text-transform: uppercase; }
+        input, select { padding: 14px; background: #000; border: 1px solid var(--card-border); color: #fff; border-radius: 10px; outline: none; }
+        .btn-main { background: var(--primary); color: #fff; border: none; padding: 18px; border-radius: 12px; font-family: var(--font-display); cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+
+        /* ESTADÍSTICAS */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .s-card { background: var(--panel); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid var(--card-border); }
+        .s-card h2 { font-family: var(--font-display); font-size: 24px; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: 65px; border-right: none; border-top: 2px solid var(--primary); order: 2; position: fixed; bottom: 0; z-index: 1000; }
+            .brand-logo { display: none; }
+            .sidebar nav { display: flex; justify-content: space-around; width: 100%; }
+            .menu-item { flex-direction: column; padding: 10px; font-size: 9px; border-left: none; border-top: 3px solid transparent; flex: 1; }
+            .menu-item.active { border-top: 3px solid var(--primary); border-left: none; }
+            .viewport { padding: 15px; padding-bottom: 80px; order: 1; }
+            .form-row { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        #ticket { display: none; }
+        @media print { body * { visibility: hidden; } #ticket, #ticket * { visibility: visible; } #ticket { position: absolute; left: 0; top: 0; display: block; width: 100%; text-align: center; color: #000; } }
+    </style>
+</head>
+<body>
+
+<div id="welcome" class="welcome-overlay">
+    <h1>BIENVENIDO</h1>
+    <h2>SMART GYM CENTER S.M.G</h2>
+    <button onclick="document.getElementById('welcome').style.opacity='0'; setTimeout(()=>{document.getElementById('welcome').style.display='none'}, 800)">INICIAR SISTEMA</button>
+</div>
+
+<div class="sidebar">
+    <div class="brand-logo"><i class="fa-solid fa-dumbbell"></i><h2>S.M.G CENTER</h2></div>
+    <nav>
+        <div class="menu-item active" onclick="nav('sec-reg', this)"><i class="fa-solid fa-plus"></i> NUEVO</div>
+        <div class="menu-item" onclick="nav('sec-list', this)"><i class="fa-solid fa-users"></i> SOCIOS</div>
+        <div class="menu-item" onclick="nav('sec-caja', this)"><i class="fa-solid fa-cash-register"></i> CAJA</div>
+        <div class="menu-item" onclick="nav('sec-data', this)"><i class="fa-solid fa-database"></i> DATOS</div>
+    </nav>
+</div>
+
+<div class="viewport">
+    <div id="sec-reg" class="section" style="display: block;">
+        <div class="glass-panel">
+            <label>Nombre del Socio</label>
+            <input type="text" id="in-nom" placeholder="NOMBRE COMPLETO" style="width:100%; margin-bottom:20px;">
+            <div class="form-row">
+                <div class="group"><label>Plan</label>
+                    <select id="in-plan" onchange="calcPay()"><option value="150">SEMANAL ($150)</option><option value="380">MENSUAL ($380)</option></select>
+                </div>
+                <div class="group"><label>Fecha Inicio</label><input type="date" id="in-fec" onchange="calcVence()"></div>
+            </div>
+            <div class="form-row">
+                <div class="group"><label>Abono ($)</label><input type="number" id="in-pago" onkeyup="calcDeuda()"></div>
+                <div class="group"><label>Método</label><select id="in-met"><option>EFECTIVO</option><option>TRANSFERENCIA</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="group"><label>Resta (Deuda)</label><input type="text" id="in-resta" readonly></div>
+                <div class="group"><label>Vence</label><input type="date" id="in-vence" readonly></div>
+            </div>
+            <button class="btn-main" onclick="save()">GUARDAR Y GENERAR TICKET</button>
+        </div>
+    </div>
+
+    <div id="sec-list" class="section">
+        <div class="stats">
+            <div class="s-card"><h4>TOTAL</h4><h2 id="st-t">0</h2></div>
+            <div class="s-card"><h4>ACTIVOS</h4><h2 id="st-v" style="color:var(--status-success)">0</h2></div>
+            <div class="s-card"><h4>VENCIDOS</h4><h2 id="st-x" style="color:var(--primary)">0</h2></div>
+        </div>
+        <input type="text" id="bus" onkeyup="render()" placeholder="🔍 BUSCAR SOCIO..." style="width:100%; padding:14px; background:#000; border:1px solid #333; color:#fff; border-radius:10px; margin-bottom:15px;">
+        <div class="table-container"><table><thead><tr><th>SOCIO</th><th>ESTADO</th><th>DEUDA</th><th>VENCE</th><th></th></tr></thead><tbody id="t-body"></tbody></table></div>
+    </div>
+
+    <div id="sec-caja" class="section">
+        <div class="stats" style="grid-template-columns: 1fr 1fr;">
+            <div class="s-card"><h4>EFECTIVO</h4><h2 id="cj-e" style="color:var(--status-success)">$0</h2></div>
+            <div class="s-card"><h4>TRANSF.</h4><h2 id="cj-t" style="color:#b2e2f2">$0</h2></div>
+        </div>
+        <div class="table-container"><table><thead><tr><th>FECHA</th><th>SOCIO</th><th>MÉTODO</th><th>MONTO</th></tr></thead><tbody id="c-body"></tbody></table></div>
+    </div>
+
+    <div id="sec-data" class="section">
+        <div class="glass-panel" style="text-align:center;">
+            <h3>BACKUP</h3>
+            <button class="btn-main" style="background:#333;" onclick="exp()">EXPORTAR DATOS</button>
+            <input type="file" id="file" onchange="imp(event)" style="margin-top:20px;">
+        </div>
+    </div>
+</div>
+
+<div id="ticket"></div>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+        });
+    }
+
+    let db = JSON.parse(localStorage.getItem('smg_members')) || [];
+    let caja = JSON.parse(localStorage.getItem('smg_caja')) || [];
+
+    function nav(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        el.classList.add('active');
+        if(id==='sec-list') render();
+        if(id==='sec-caja') renderCaja();
+    }
+
+    function calcPay() { 
+        document.getElementById('in-pago').value = document.getElementById('in-plan').value; 
+        calcDeuda(); calcVence();
+    }
+
+    function calcDeuda() {
+        const total = parseFloat(document.getElementById('in-plan').value);
+        const pago = parseFloat(document.getElementById('in-pago').value) || 0;
+        document.getElementById('in-resta').value = "$" + (total - pago).toFixed(2);
+    }
+
+    function calcVence() {
+        const f = document.getElementById('in-fec').value;
+        if(!f) return;
+        let d = new Date(f + 'T00:00:00');
+        const p = document.getElementById('in-plan').value;
+        d.setDate(d.getDate() + (p === '150' ? 7 : 30));
+        d.setDate(d.getDate() - 1);
+        document.getElementById('in-vence').value = d.toISOString().split('T')[0];
+    }
+
+    function save() {
+        const n = document.getElementById('in-nom').value.toUpperCase().trim();
+        const p = document.getElementById('in-pago').value;
+        const v = document.getElementById('in-vence').value;
+        if(!n || !p || !v) return alert("Completa los campos");
+
+        const socio = { n, p, d: document.getElementById('in-resta').value, v, m: document.getElementById('in-met').value, f: document.getElementById('in-fec').value };
+        db.push(socio);
+        caja.unshift({ f: new Date().toLocaleDateString(), n, m: socio.m, a: p });
+        
+        localStorage.setItem('smg_members', JSON.stringify(db));
+        localStorage.setItem('smg_caja', JSON.stringify(caja));
+
+        document.getElementById('ticket').innerHTML = `<h2>SMG CENTER</h2><hr><p>SOCIO: ${n}</p><p>PAGO: $${p}</p><p>DEUDA: ${socio.d}</p><hr><h3>VENCE: ${v}</h3>`;
+        window.print();
+        location.reload();
+    }
+
+    function render() {
+        const b = document.getElementById('bus').value.toUpperCase();
+        const hoy = new Date().toISOString().split('T')[0];
+        let h = '', t=0, act=0, ven=0;
+        db.forEach((s, i) => {
+            if(s.n.includes(b)) {
+                const isV = s.v >= hoy;
+                const hasD = s.d !== "$0.00";
+                t++; isV ? act++ : ven++;
+                h += `<tr><td><b>${s.n}</b></td>
+                    <td><span class="badge ${isV?'bg-v':'bg-x'}">${isV?'ACTIVO':'VENCIDO'}</span></td>
+                    <td><span class="badge ${hasD?'bg-d':''}">${s.d}</span></td>
+                    <td>${s.v}</td>
+                    <td><button onclick="del(${i})">🗑️</button></td></tr>`;
+            }
+        });
+        document.getElementById('t-body').innerHTML = h;
+        document.getElementById('st-t').innerText = t; document.getElementById('st-v').innerText = act; document.getElementById('st-x').innerText = ven;
+    }
+
+    function renderCaja() {
+        let e=0, t=0;
+        document.getElementById('c-body').innerHTML = caja.map(c => {
+            const m = parseFloat(c.a) || 0;
+            if(c.m === 'EFECTIVO') e += m; else t += m;
+            return `<tr><td>${c.f}</td><td>${c.n}</td><td>${c.m}</td><td>$${m.toFixed(2)}</td></tr>`;
+        }).join('');
+        document.getElementById('cj-e').innerText = "$" + e.toFixed(2);
+        document.getElementById('cj-t').innerText = "$" + t.toFixed(2);
+    }
+
+    function exp() {
+        const blob = new Blob([JSON.stringify({db, caja})], {type:'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = `SMG_DATA_${new Date().toLocaleDateString()}.json`; a.click();
+    }
+
+    function imp(e) {
+        const reader = new FileReader();
+        reader.onload = (x) => {
+            const data = JSON.parse(x.target.result);
+            db = data.db; caja = data.caja;
+            localStorage.setItem('smg_members', JSON.stringify(db));
+            localStorage.setItem('smg_caja', JSON.stringify(caja));
+            alert("Restaurado"); location.reload();
+        };
+        reader.readAsText(e.target.files[0]);
+    }
+
+    function del(i) { if(confirm("¿Eliminar?")) { db.splice(i,1); localStorage.setItem('smg_members', JSON.stringify(db)); render(); } }
+
+    document.getElementById('in-fec').valueAsDate = new Date();
+    calcPay();
+</script>
+
+</body>
+</html>

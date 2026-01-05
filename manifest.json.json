@@ -1,0 +1,16 @@
+{
+  "name": "SMG Center Nexus",
+  "short_name": "SMG Nexus",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff0000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/q04sK0C/dumbbell-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
